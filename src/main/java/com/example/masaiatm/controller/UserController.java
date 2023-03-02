@@ -3,6 +3,7 @@ package com.example.masaiatm.controller;
 import com.example.masaiatm.dto.LoginDTO;
 import com.example.masaiatm.dto.RegisterDTO;
 import com.example.masaiatm.entity.Account;
+import com.example.masaiatm.entity.User;
 import com.example.masaiatm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,14 @@ public class UserController {
         return account != null ? new ResponseEntity<>(account, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @DeleteMapping("/masaiAtm/user/{accountId}")
+    public ResponseEntity<?> deleteAccount(@PathVariable String accountId){
+        boolean isDeleted =  userService.deleteAccount(accountId);
+        return isDeleted ? new ResponseEntity<>("Details updated successfully", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
+    @GetMapping("/masaiAtm/welcome")
+    public ResponseEntity<String> welcome(){
+        return new ResponseEntity<>("Welcome!", HttpStatus.OK);
+    }
 }

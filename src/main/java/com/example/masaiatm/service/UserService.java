@@ -107,4 +107,14 @@ public class UserService {
         }
         return account;
     }
+
+    public boolean deleteAccount(String accountId) {
+        try{
+            accountRepository.deleteById(accountId);
+        }
+        catch (Exception e){
+            e.getStackTrace();
+        }
+        return true;
+    }
 }
