@@ -2,9 +2,11 @@ package com.example.masaiatm.service;
 
 import com.example.masaiatm.dto.LoginDTO;
 import com.example.masaiatm.dto.RegisterDTO;
+import com.example.masaiatm.entity.Account;
 import com.example.masaiatm.entity.Role;
 import com.example.masaiatm.entity.User;
 import com.example.masaiatm.exception.BadRequestException;
+import com.example.masaiatm.repository.AccountRepository;
 import com.example.masaiatm.repository.RoleRepository;
 import com.example.masaiatm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -30,6 +33,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -55,7 +61,7 @@ public class UserService {
             user.setEmail(registerDTO.getEmail());
             user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
-            Role roles = roleRepository.findByName("ROLE_ADMIN").get();
+            Role roles = roleRepository.findByName("GUEST").get();
             user.setRoles(Collections.singleton(roles));
 
             userRepository.save(user);
@@ -78,5 +84,27 @@ public class UserService {
         }
 
         return true;
+    }
+
+    public List<Account> getAccounts() {
+        List<Account> accounts = null;
+        try{
+            accounts = accountRepository.findAll();
+        }
+        catch (Exception e){
+            e.getStackTrace();
+        }
+        return accounts;
+    }
+
+    public Account getAccount(String accountId) {
+        Account account = null;
+        try{
+            account = accountRepository.getReferenceById(accountId);
+        }
+        catch (Exception e){
+            e.getStackTrace();
+        }
+        return account;
     }
 }
